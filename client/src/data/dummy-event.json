@@ -1,0 +1,113 @@
+{
+  "event": {
+    "id": "1",
+    "slug": "desi-reza",
+    "title": "Pernikahan Desi & Reza",
+    "template": "modern",
+    "cover": {
+      "title": "Dengan Rahmat Tuhan Yang Maha Esa",
+      "bride": "Desi Rahmawati",
+      "groom": "Reza Firmansyah",
+      "date": "2026-03-26",
+      "image_url": "https://images.unsplash.com/photo-1519741497674-611481863552?w=1200"
+    },
+    "couple": {
+      "bride": {
+        "full_name": "Desi Rahmawati, S.Kom",
+        "short_name": "Desi",
+        "parents": "Putri dari Bapak H. Rahmat Hidayat & Ibu Hj. Siti Nurhaliza",
+        "photo_url": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400",
+        "instagram": "@desi.rahmawati"
+      },
+      "groom": {
+        "full_name": "Reza Firmansyah, S.T",
+        "short_name": "Reza",
+        "parents": "Putra dari Bapak Ir. Firmansyah & Ibu Dra. Endang Suryani",
+        "photo_url": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
+        "instagram": "@reza.firmansyah"
+      },
+      "story": "Kisah cinta kami dimulai dari pertemuan yang tak terduga di sebuah acara keluarga besar. Dari sekedar kenal, berkembang menjadi sahabat, dan akhirnya menjadi belahan jiwa. Setelah 4 tahun menjalin hubungan yang penuh makna, kami siap melangkah ke jenjang pernikahan dan membangun keluarga bahagia bersama."
+    },
+    "events": [
+      {
+        "type": "Akad Nikah",
+        "date": "2026-03-26",
+        "time": "09:00 - 11:00 WIB",
+        "location": "Masjid Raya Al-Azhar",
+        "address": "Jl. Sisingamangaraja No. 12, Jakarta Selatan 12110"
+      },
+      {
+        "type": "Resepsi Pernikahan",
+        "date": "2026-03-26",
+        "time": "12:00 - 17:00 WIB",
+        "location": "Ballroom Grand Indonesia",
+        "address": "Jl. M.H. Thamrin Kav. 6, Jakarta Pusat 10230"
+      }
+    ],
+    "location": {
+      "name": "Ballroom Grand Indonesia",
+      "address": "Jl. M.H. Thamrin Kav. 6, Jakarta Pusat 10230, DKI Jakarta",
+      "maps_url": "https://maps.google.com/?q=-6.1944,106.8212",
+      "maps_embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.2519999999998!2d106.8212!3d-6.1944!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f3e6c9c9c9c9%3A0x0!2sGrand%20Indonesia!5e0!3m2!1sen!2sid!4v1234567890"
+    },
+    "gallery": [
+      {
+        "url": "https://images.unsplash.com/photo-1606800052052-a08af7148866?w=800",
+        "caption": "Momen Romantis di Pantai Sunset"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=800",
+        "caption": "Kebersamaan di Taman Bunga"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=800",
+        "caption": "Candid Moment yang Penuh Cinta"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=800",
+        "caption": "Senyuman Bahagia Bersama"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800",
+        "caption": "Pose Romantis di Kota"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800",
+        "caption": "Momen Istimewa Berdua"
+      }
+    ],
+    "gift": {
+      "enabled": true,
+      "message": "Kehadiran dan doa restu dari Anda adalah hadiah paling berharga bagi kami. Namun, jika Anda ingin memberikan hadiah, Anda dapat mengirimkan melalui transfer ke rekening kami di bawah ini. Terima kasih atas dukungan dan kasih sayang Anda.",
+      "accounts": [
+        {
+          "bank": "BCA",
+          "account_number": "1234567890",
+          "account_name": "Desi Rahmawati"
+        },
+        {
+          "bank": "Mandiri",
+          "account_number": "0987654321",
+          "account_name": "Reza Firmansyah"
+        },
+        {
+          "bank": "BNI",
+          "account_number": "5555666677",
+          "account_name": "Desi Rahmawati"
+        }
+      ]
+    },
+    "music": {
+      "url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+      "title": "Cinta Sejati - Instrumental"
+    },
+    "theme": {
+      "background_type": "gradient",
+      "background_value": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+      "primary_color": "345.5 100% 55.5%",
+      "radius": "0.5rem",
+      "font_heading": "Playfair Display",
+      "font_body": "Inter"
+    }
+  }
+}

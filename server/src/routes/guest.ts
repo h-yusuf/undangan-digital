@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import { getSupabaseClient, getSupabaseAdmin } from '../services/supabase';
 import { successResponse, errorResponse } from '../utils/response';
+import { validateGuestInput, sanitizeInput, validateSlug } from '../middleware/validation';
 
 type Bindings = {
   SUPABASE_URL: string;
@@ -33,20 +34,25 @@ guest.get('/:id', async (c) => {
 });
 
 // POST /guest
-guest.post('/', async (c) => {
+guest.post('/', validateGuestInput, async (c) => {
   try {
     const body = await c.req.json();
     const { event_id, name, phone, email } = body;
 
-    if (!event_id || !name) {
-      return c.json(errorResponse('event_id and name are required', 400), 400);
-    }
+    const sanitizedName = sanitizeInput(name);
+    const sanitizedPhone = phone ? sanitizeInput(phone) : undefined;
+    const sanitizedEmail = email ? sanitizeInput(email) : undefined;
 
     const supabase = getSupabaseAdmin(c.env);
 
     const { data, error } = await supabase
       .from('guests')
-      .insert({ event_id, name, phone, email })
+      .insert({ 
+        event_id, 
+        name: sanitizedName, 
+        phone: sanitizedPhone, 
+        email: sanitizedEmail 
+      })
       .select()
       .single();
 
@@ -91,13 +97,19 @@ guest.get('/find', async (c) => {
       return c.json(errorResponse('event_id and name are required', 400), 400);
     }
 
+    if (name.length > 100) {
+      return c.json(errorResponse('name too long', 400), 400);
+    }
+
     const supabase = getSupabaseClient(c.env);
+
+    const sanitizedName = sanitizeInput(name);
 
     const { data, error } = await supabase
       .from('guests')
       .select('*')
       .eq('event_id', event_id)
-      .ilike('name', name)
+      .ilike('name', sanitizedName)
       .single();
 
     if (error || !data) {

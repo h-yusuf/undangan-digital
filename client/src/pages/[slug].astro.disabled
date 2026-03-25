@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const { slug } = Astro.params;
+const guestName = Astro.url.searchParams.get('to') || 'Guest';
+---
+
+<BaseLayout title={slug || 'Page'}>
+  <main class="min-h-screen flex items-center justify-center p-10">
+    <div class="text-center space-y-4">
+      <h1 class="text-4xl font-bold">Dynamic Route: {slug}</h1>
+      <p class="text-lg text-slate-600">Guest: {guestName}</p>
+      <p class="text-sm text-slate-500">This dynamic route is under construction.</p>
+      <a href="/shadcn-full?to=Desi" class="inline-block mt-4 px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">
+        Open Shadcn Template
+      </a>
+    </div>
+  </main>
+</BaseLayout>

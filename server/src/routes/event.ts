@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import { getSupabaseClient } from '../services/supabase';
 import { successResponse, errorResponse } from '../utils/response';
+import { validateSlug } from '../middleware/validation';
 
 type Bindings = {
   SUPABASE_URL: string;
@@ -14,6 +15,11 @@ const event = new Hono<{ Bindings: Bindings }>();
 event.get('/:slug', async (c) => {
   try {
     const slug = c.req.param('slug');
+    
+    if (!validateSlug(slug)) {
+      return c.json(errorResponse('Invalid slug format', 400), 400);
+    }
+    
     const supabase = getSupabaseClient(c.env);
 
     const { data, error } = await supabase

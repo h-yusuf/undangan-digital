@@ -1,0 +1,616 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import dummyData from '../data/dummy-event.json';
+import { Home, Users, Calendar, MapPin, Image, Gift, MessageCircle } from 'lucide-astro';
+
+const { event } = dummyData;
+const guestName = Astro.url.searchParams.get('to') || 'Tamu Undangan';
+
+// Format date
+const eventDate = new Date(event.cover.date);
+const formattedDate = eventDate.toLocaleDateString('id-ID', {
+  weekday: 'long',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout title={event.title}>
+  <!-- Music Player -->
+  <div id="music-player" class="fixed top-6 right-6 z-50">
+    <button 
+      id="music-toggle" 
+      class="bg-brown-800 hover:bg-brown-900 text-beige-100 rounded-full p-3 shadow-xl transition-all duration-300 hover:scale-110 border-2 border-brown-600"
+      aria-label="Toggle music"
+    >
+      <svg id="music-icon-play" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"/>
+      </svg>
+      <svg id="music-icon-pause" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+      </svg>
+    </button>
+    <audio id="background-music" loop>
+      <source src={event.music.url} type="audio/mpeg">
+    </audio>
+  </div>
+
+  <!-- Bottom Icon Navigation Bar -->
+  <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 bg-brown-900/95 backdrop-blur-sm shadow-2xl z-50 border-t-2 border-brown-700">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-around items-center h-16 max-w-2xl mx-auto">
+        <a href="#cover" class="nav-icon-link flex flex-col items-center justify-center text-beige-300 hover:text-beige-100 transition-colors group">
+          <Home class="w-6 h-6 mb-1" />
+          <span class="text-xs opacity-0 group-hover:opacity-100 transition-opacity">Home</span>
+        </a>
+        <a href="#couple" class="nav-icon-link flex flex-col items-center justify-center text-beige-300 hover:text-beige-100 transition-colors group">
+          <Users class="w-6 h-6 mb-1" />
+          <span class="text-xs opacity-0 group-hover:opacity-100 transition-opacity">Couple</span>
+        </a>
+        <a href="#event" class="nav-icon-link flex flex-col items-center justify-center text-beige-300 hover:text-beige-100 transition-colors group">
+          <Calendar class="w-6 h-6 mb-1" />
+          <span class="text-xs opacity-0 group-hover:opacity-100 transition-opacity">Event</span>
+        </a>
+        <a href="#maps" class="nav-icon-link flex flex-col items-center justify-center text-beige-300 hover:text-beige-100 transition-colors group">
+          <MapPin class="w-6 h-6 mb-1" />
+          <span class="text-xs opacity-0 group-hover:opacity-100 transition-opacity">Maps</span>
+        </a>
+        <a href="#gallery" class="nav-icon-link flex flex-col items-center justify-center text-beige-300 hover:text-beige-100 transition-colors group">
+          <Image class="w-6 h-6 mb-1" />
+          <span class="text-xs opacity-0 group-hover:opacity-100 transition-opacity">Gallery</span>
+        </a>
+        <a href="#gift" class="nav-icon-link flex flex-col items-center justify-center text-beige-300 hover:text-beige-100 transition-colors group">
+          <Gift class="w-6 h-6 mb-1" />
+          <span class="text-xs opacity-0 group-hover:opacity-100 transition-opacity">Gift</span>
+        </a>
+        <a href="#wishes" class="nav-icon-link flex flex-col items-center justify-center text-beige-300 hover:text-beige-100 transition-colors group">
+          <MessageCircle class="w-6 h-6 mb-1" />
+          <span class="text-xs opacity-0 group-hover:opacity-100 transition-opacity">Wishes</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Cover Section -->
+  <section id="cover" class="relative min-h-screen flex items-center justify-center overflow-hidden bg-beige-100">
+    <!-- Ornamental Clouds -->
+    <div class="absolute top-20 left-10 opacity-30">
+      <svg width="120" height="60" viewBox="0 0 120 60" fill="none">
+        <path d="M20 40C20 40 10 35 10 25C10 15 20 10 30 15C30 15 35 5 45 10C55 15 50 25 50 25C50 25 60 20 65 30C70 40 60 45 50 45L20 40Z" fill="#5D4E37"/>
+      </svg>
+    </div>
+    <div class="absolute top-32 right-16 opacity-30">
+      <svg width="100" height="50" viewBox="0 0 100 50" fill="none">
+        <path d="M15 35C15 35 8 31 8 23C8 15 15 11 23 15C23 15 27 7 35 11C43 15 39 23 39 23C39 23 47 19 51 27C55 35 47 39 39 39L15 35Z" fill="#5D4E37"/>
+      </svg>
+    </div>
+
+    <!-- Wayang Silhouette Ornament -->
+    <div class="absolute top-1/4 left-1/2 transform -translate-x-1/2 opacity-20">
+      <svg width="200" height="300" viewBox="0 0 200 300" fill="none">
+        <path d="M100 50C100 50 80 60 80 90L70 150L80 200L100 250L120 200L130 150L120 90C120 90 120 60 100 50Z" fill="#3E2723"/>
+        <circle cx="100" cy="70" r="25" fill="#3E2723"/>
+      </svg>
+    </div>
+
+    <div class="relative z-10 text-center px-4 animate-fade-in">
+      <p class="text-base md:text-lg font-light mb-6 tracking-widest text-brown-800">{event.cover.title}</p>
+      
+      <!-- Wayang Couple Illustration Placeholder -->
+      <div class="mb-6 flex justify-center">
+        <div class="relative">
+          <svg width="200" height="200" viewBox="0 0 200 200" class="mx-auto">
+            <!-- Bride Wayang -->
+            <g transform="translate(50, 50)">
+              <circle cx="20" cy="20" r="15" fill="#3E2723"/>
+              <path d="M20 35L15 80L20 100L25 80L20 35Z" fill="#3E2723"/>
+              <path d="M10 50L5 70L10 75L10 50Z" fill="#3E2723"/>
+              <path d="M30 50L35 70L30 75L30 50Z" fill="#3E2723"/>
+            </g>
+            <!-- Groom Wayang -->
+            <g transform="translate(130, 50)">
+              <circle cx="20" cy="20" r="15" fill="#3E2723"/>
+              <path d="M20 35L15 80L20 100L25 80L20 35Z" fill="#3E2723"/>
+              <path d="M10 50L5 70L10 75L10 50Z" fill="#3E2723"/>
+              <path d="M30 50L35 70L30 75L30 50Z" fill="#3E2723"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <h1 class="font-serif text-4xl md:text-6xl font-bold mb-2 text-brown-900" style="font-family: 'Great Vibes', cursive;">
+        {event.cover.bride} & {event.cover.groom}
+      </h1>
+      
+      <div class="my-8">
+        <p class="text-sm md:text-base text-brown-700 mb-2">Ahad, 12 April 2026</p>
+      </div>
+
+      <div class="bg-brown-800/10 backdrop-blur-sm rounded-lg p-6 max-w-md mx-auto mb-8 border-2 border-brown-300">
+        <p class="text-sm text-brown-700 mb-2">Kepada Yth.</p>
+        <p class="text-2xl font-semibold text-brown-900">{guestName}</p>
+      </div>
+
+      <a 
+        href="#couple" 
+        class="inline-block bg-brown-800 hover:bg-brown-900 text-beige-100 px-8 py-3 rounded-full font-medium transition-all duration-300 hover:scale-105 shadow-lg border-2 border-brown-600"
+      >
+        Buka Undangan
+      </a>
+    </div>
+
+    <!-- Bottom Wave Decoration -->
+    <div class="absolute bottom-0 left-0 right-0">
+      <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full">
+        <path d="M0 0L60 10C120 20 240 40 360 45C480 50 600 40 720 35C840 30 960 30 1080 35C1200 40 1320 50 1380 55L1440 60V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0V0Z" fill="#5D4E37" fill-opacity="0.3"/>
+        <path d="M0 40L60 45C120 50 240 60 360 63C480 66 600 62 720 58C840 54 960 50 1080 52C1200 54 1320 62 1380 66L1440 70V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0V40Z" fill="#3E2723" fill-opacity="0.2"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Couple Section -->
+  <section id="couple" class="py-20 bg-gradient-to-b from-beige-50 to-beige-100">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16 animate-fade-in-up">
+        <h2 class="font-serif text-4xl md:text-5xl font-bold text-brown-900 mb-4">Mempelai</h2>
+        <div class="w-24 h-1 bg-brown-600 mx-auto"></div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto mb-16">
+        <!-- Bride -->
+        <div class="text-center animate-fade-in-up" style="animation-delay: 0.2s">
+          <div class="relative inline-block mb-6">
+            <div class="w-64 h-64 rounded-full overflow-hidden border-4 border-brown-600 shadow-xl mx-auto">
+              <img src={event.couple.bride.photo_url} alt={event.couple.bride.full_name} class="w-full h-full object-cover">
+            </div>
+            <div class="absolute -bottom-2 -right-2 bg-brown-800 text-beige-100 rounded-full p-3">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 3.5a1.5 1.5 0 013 0V4a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-.5a1.5 1.5 0 000 3h.5a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-.5a1.5 1.5 0 00-3 0v.5a1 1 0 01-1 1H6a1 1 0 01-1-1v-3a1 1 0 00-1-1h-.5a1.5 1.5 0 010-3H4a1 1 0 001-1V6a1 1 0 011-1h3a1 1 0 001-1v-.5z"/>
+              </svg>
+            </div>
+          </div>
+          <h3 class="font-serif text-3xl font-bold text-brown-900 mb-2">{event.couple.bride.full_name}</h3>
+          <p class="text-brown-700 mb-3">{event.couple.bride.parents}</p>
+          <a href={`https://instagram.com/${event.couple.bride.instagram.replace('@', '')}`} target="_blank" class="inline-flex items-center text-brown-800 hover:text-brown-900">
+            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+            </svg>
+            {event.couple.bride.instagram}
+          </a>
+        </div>
+
+        <!-- Groom -->
+        <div class="text-center animate-fade-in-up" style="animation-delay: 0.4s">
+          <div class="relative inline-block mb-6">
+            <div class="w-64 h-64 rounded-full overflow-hidden border-4 border-brown-600 shadow-xl mx-auto">
+              <img src={event.couple.groom.photo_url} alt={event.couple.groom.full_name} class="w-full h-full object-cover">
+            </div>
+            <div class="absolute -bottom-2 -right-2 bg-brown-800 text-beige-100 rounded-full p-3">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 3.5a1.5 1.5 0 013 0V4a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-.5a1.5 1.5 0 000 3h.5a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-.5a1.5 1.5 0 00-3 0v.5a1 1 0 01-1 1H6a1 1 0 01-1-1v-3a1 1 0 00-1-1h-.5a1.5 1.5 0 010-3H4a1 1 0 001-1V6a1 1 0 011-1h3a1 1 0 001-1v-.5z"/>
+              </svg>
+            </div>
+          </div>
+          <h3 class="font-serif text-3xl font-bold text-brown-900 mb-2">{event.couple.groom.full_name}</h3>
+          <p class="text-brown-700 mb-3">{event.couple.groom.parents}</p>
+          <a href={`https://instagram.com/${event.couple.groom.instagram.replace('@', '')}`} target="_blank" class="inline-flex items-center text-brown-800 hover:text-brown-900">
+            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+            </svg>
+            {event.couple.groom.instagram}
+          </a>
+        </div>
+      </div>
+
+      <!-- Love Story -->
+      <div class="max-w-3xl mx-auto text-center animate-fade-in-up" style="animation-delay: 0.6s">
+        <div class="bg-beige-50 rounded-lg shadow-lg p-8 border-2 border-brown-300">
+          <svg class="w-12 h-12 text-brown-700 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+          </svg>
+          <h3 class="font-serif text-2xl font-bold text-brown-900 mb-4">Our Story</h3>
+          <p class="text-brown-700 leading-relaxed">{event.couple.story}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Countdown Section -->
+  <section class="py-12 bg-beige-100">
+    <div class="container mx-auto px-4 text-center">
+      <div id="countdown" class="flex justify-center gap-3 md:gap-4 flex-wrap max-w-md mx-auto">
+        <div class="bg-transparent border-2 border-brown-800 rounded-lg p-4 min-w-[70px]">
+          <div id="days" class="text-3xl md:text-4xl font-bold mb-1 text-brown-900">00</div>
+          <div class="text-xs uppercase tracking-wider text-brown-700">Hari</div>
+        </div>
+        <div class="bg-transparent border-2 border-brown-800 rounded-lg p-4 min-w-[70px]">
+          <div id="hours" class="text-3xl md:text-4xl font-bold mb-1 text-brown-900">00</div>
+          <div class="text-xs uppercase tracking-wider text-brown-700">Jam</div>
+        </div>
+        <div class="bg-transparent border-2 border-brown-800 rounded-lg p-4 min-w-[70px]">
+          <div id="minutes" class="text-3xl md:text-4xl font-bold mb-1 text-brown-900">00</div>
+          <div class="text-xs uppercase tracking-wider text-brown-700">Menit</div>
+        </div>
+        <div class="bg-transparent border-2 border-brown-800 rounded-lg p-4 min-w-[70px]">
+          <div id="seconds" class="text-3xl md:text-4xl font-bold mb-1 text-brown-900">00</div>
+          <div class="text-xs uppercase tracking-wider text-brown-700">Detik</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Event Details Section -->
+  <section id="event" class="py-20 bg-beige-50">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16 animate-fade-in-up">
+        <h2 class="font-serif text-4xl md:text-5xl font-bold text-brown-900 mb-4">Acara</h2>
+        <div class="w-24 h-1 bg-brown-600 mx-auto"></div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        {event.events.map((evt, index) => (
+          <div class="bg-beige-100 rounded-lg shadow-lg p-8 text-center animate-fade-in-up border-2 border-brown-300" style={`animation-delay: ${index * 0.2}s`}>
+            <div class="w-16 h-16 bg-brown-800 text-beige-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+            </div>
+            <h3 class="font-serif text-2xl font-bold text-gray-800 mb-3">{evt.type}</h3>
+            <div class="space-y-2 text-gray-600">
+              <p class="flex items-center justify-center">
+                <svg class="w-5 h-5 mr-2 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                {new Date(evt.date).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+              </p>
+              <p class="flex items-center justify-center">
+                <svg class="w-5 h-5 mr-2 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                {evt.time}
+              </p>
+              <p class="flex items-center justify-center">
+                <svg class="w-5 h-5 mr-2 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                {evt.location}
+              </p>
+              <p class="text-sm text-gray-500 mt-2">{evt.address}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Maps Section -->
+  <section id="maps" class="py-20 bg-beige-100">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12 animate-fade-in-up">
+        <h2 class="font-serif text-4xl md:text-5xl font-bold text-brown-900 mb-4">Lokasi</h2>
+        <div class="w-24 h-1 bg-brown-600 mx-auto mb-4"></div>
+        <p class="text-brown-700 max-w-2xl mx-auto">{event.location.address}</p>
+      </div>
+
+      <div class="max-w-4xl mx-auto">
+        <div class="bg-beige-50 rounded-lg shadow-lg overflow-hidden border-2 border-brown-300">
+          <iframe 
+            src={event.location.maps_embed}
+            width="100%" 
+            height="450" 
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade"
+            class="w-full"
+          ></iframe>
+          <div class="p-6 text-center bg-beige-50">
+            <a 
+              href={event.location.maps_url} 
+              target="_blank"
+              class="inline-block bg-brown-800 hover:bg-brown-900 text-beige-100 px-8 py-3 rounded-full font-medium transition-all duration-300 hover:scale-105 border-2 border-brown-600"
+            >
+              Buka di Google Maps
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section id="gallery" class="py-20 bg-beige-50">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16 animate-fade-in-up">
+        <h2 class="font-serif text-4xl md:text-5xl font-bold text-brown-900 mb-4">Galeri</h2>
+        <div class="w-24 h-1 bg-brown-600 mx-auto"></div>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
+        {event.gallery.map((photo, index) => (
+          <div class="relative overflow-hidden rounded-lg shadow-lg group animate-fade-in-up" style={`animation-delay: ${index * 0.1}s`}>
+            <img 
+              src={photo.url} 
+              alt={photo.caption}
+              class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-brown-900/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+              <p class="text-beige-100 text-center px-4 font-medium">{photo.caption}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- RSVP Section -->
+  <section id="rsvp" class="py-20 bg-beige-100">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12 animate-fade-in-up">
+        <h2 class="font-serif text-4xl md:text-5xl font-bold text-brown-900 mb-4">Konfirmasi Kehadiran</h2>
+        <div class="w-24 h-1 bg-brown-600 mx-auto mb-4"></div>
+        <p class="text-brown-700 max-w-2xl mx-auto">Mohon konfirmasi kehadiran Anda</p>
+      </div>
+
+      <div class="max-w-2xl mx-auto bg-beige-50 rounded-lg shadow-lg p-8 border-2 border-brown-300">
+        <form id="rsvp-form" class="space-y-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Nama</label>
+            <input 
+              type="text" 
+              name="name" 
+              value={guestName}
+              readonly
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Konfirmasi Kehadiran</label>
+            <div class="grid grid-cols-3 gap-4">
+              <label class="relative flex items-center justify-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-primary-500 transition-colors">
+                <input type="radio" name="status" value="hadir" class="sr-only peer" required />
+                <div class="text-center peer-checked:text-primary-600">
+                  <svg class="w-8 h-8 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                  </svg>
+                  <span class="text-sm font-medium">Hadir</span>
+                </div>
+                <div class="absolute inset-0 border-2 border-primary-500 rounded-lg opacity-0 peer-checked:opacity-100"></div>
+              </label>
+
+              <label class="relative flex items-center justify-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-primary-500 transition-colors">
+                <input type="radio" name="status" value="tidak_hadir" class="sr-only peer" />
+                <div class="text-center peer-checked:text-primary-600">
+                  <svg class="w-8 h-8 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                  </svg>
+                  <span class="text-sm font-medium">Tidak Hadir</span>
+                </div>
+                <div class="absolute inset-0 border-2 border-primary-500 rounded-lg opacity-0 peer-checked:opacity-100"></div>
+              </label>
+
+              <label class="relative flex items-center justify-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-primary-500 transition-colors">
+                <input type="radio" name="status" value="ragu" class="sr-only peer" />
+                <div class="text-center peer-checked:text-primary-600">
+                  <svg class="w-8 h-8 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+                  </svg>
+                  <span class="text-sm font-medium">Ragu</span>
+                </div>
+                <div class="absolute inset-0 border-2 border-primary-500 rounded-lg opacity-0 peer-checked:opacity-100"></div>
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Pesan & Doa (Opsional)</label>
+            <textarea 
+              name="message" 
+              rows="4" 
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              placeholder="Tuliskan pesan dan doa untuk kami..."
+            ></textarea>
+          </div>
+
+          <button 
+            type="submit" 
+            class="w-full bg-brown-800 hover:bg-brown-900 text-beige-100 py-3 rounded-lg font-medium transition-all duration-300 hover:scale-105 border-2 border-brown-600"
+          >
+            Kirim Konfirmasi
+          </button>
+
+          <div id="rsvp-message" class="hidden p-4 rounded-lg"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gift Section -->
+  <section id="gift" class="py-20 bg-beige-50">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12 animate-fade-in-up">
+        <h2 class="font-serif text-4xl md:text-5xl font-bold text-brown-900 mb-4">Amplop Digital</h2>
+        <div class="w-24 h-1 bg-brown-600 mx-auto mb-6"></div>
+        <p class="text-brown-700 max-w-2xl mx-auto">{event.gift.message}</p>
+      </div>
+
+      <div class="max-w-2xl mx-auto grid md:grid-cols-2 gap-6">
+        {event.gift.accounts.map((account, index) => (
+          <div class="bg-beige-100 rounded-lg shadow-lg p-6 animate-fade-in-up border-2 border-brown-300" style={`animation-delay: ${index * 0.2}s`}>
+            <div class="flex items-center justify-center mb-4">
+              <div class="w-16 h-16 bg-brown-200 rounded-full flex items-center justify-center">
+                <svg class="w-8 h-8 text-brown-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                </svg>
+              </div>
+            </div>
+            <h3 class="text-xl font-bold text-brown-900 text-center mb-2">{account.bank}</h3>
+            <p class="text-2xl font-mono font-bold text-brown-800 text-center mb-2">{account.account_number}</p>
+            <p class="text-sm text-brown-700 text-center mb-4">{account.account_name}</p>
+            <button 
+              onclick={`navigator.clipboard.writeText('${account.account_number}'); this.textContent='Tersalin!'; setTimeout(() => this.textContent='Salin Nomor Rekening', 2000)`}
+              class="w-full bg-brown-800 hover:bg-brown-900 text-beige-100 py-2 rounded-lg font-medium transition-colors border-2 border-brown-600"
+            >
+              Salin Nomor Rekening
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-brown-900 text-beige-100 py-12">
+    <div class="container mx-auto px-4 text-center">
+      <p class="text-2xl font-serif mb-2">Thank You</p>
+      <p class="text-beige-300 mb-6">{event.cover.bride} & {event.cover.groom}</p>
+      <div class="w-24 h-1 bg-brown-600 mx-auto mb-6"></div>
+      <p class="text-sm text-beige-400">Made with ❤️ by Undangan Digital Platform</p>
+    </div>
+  </footer>
+
+  <style>
+    @keyframes fade-in {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fade-in-up {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-in {
+      animation: fade-in 1s ease-out;
+    }
+
+    .animate-fade-in-up {
+      animation: fade-in-up 0.8s ease-out;
+      animation-fill-mode: both;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    .nav-link.active {
+      color: #d4af37;
+    }
+  </style>
+
+  <script define:vars={{ eventDate: event.cover.date }}>
+    // Countdown Timer
+    function updateCountdown() {
+      const target = new Date(eventDate).getTime();
+      const now = new Date().getTime();
+      const diff = target - now;
+
+      if (diff > 0) {
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById('days').textContent = String(days).padStart(2, '0');
+        document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+        document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+        document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+      }
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // Music Player
+    const audio = document.getElementById('background-music');
+    const toggleBtn = document.getElementById('music-toggle');
+    const playIcon = document.getElementById('music-icon-play');
+    const pauseIcon = document.getElementById('music-icon-pause');
+
+    toggleBtn.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play();
+        playIcon.classList.add('hidden');
+        pauseIcon.classList.remove('hidden');
+      } else {
+        audio.pause();
+        playIcon.classList.remove('hidden');
+        pauseIcon.classList.add('hidden');
+      }
+    });
+
+    // Sticky Navbar
+    let lastScroll = 0;
+    const navbar = document.getElementById('navbar');
+
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+      
+      if (currentScroll > 300) {
+        navbar.classList.remove('-translate-y-full');
+      } else {
+        navbar.classList.add('-translate-y-full');
+      }
+      
+      lastScroll = currentScroll;
+    });
+
+    // Active Nav Link
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (pageYOffset >= sectionTop - 200) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+          link.classList.add('active');
+        }
+      });
+    });
+
+    // RSVP Form (Dummy - will integrate with API later)
+    const rsvpForm = document.getElementById('rsvp-form');
+    const rsvpMessage = document.getElementById('rsvp-message');
+
+    rsvpForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(rsvpForm);
+      const data = {
+        name: formData.get('name'),
+        status: formData.get('status'),
+        message: formData.get('message')
+      };
+
+      // TODO: Integrate with actual API
+      console.log('RSVP Data:', data);
+      
+      rsvpMessage.classList.remove('hidden', 'bg-red-100', 'text-red-700');
+      rsvpMessage.classList.add('bg-green-100', 'text-green-700');
+      rsvpMessage.textContent = 'Terima kasih! Konfirmasi Anda telah diterima.';
+      
+      setTimeout(() => {
+        rsvpMessage.classList.add('hidden');
+      }, 5000);
+    });
+  </script>
+</BaseLayout>

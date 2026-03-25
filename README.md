@@ -2,13 +2,28 @@
 
 Platform undangan digital modern dengan Astro, Hono, dan Supabase.
 
+## ✨ Features
+
+✅ **Phase 1-13 Complete!**
+
+- 🎨 Dynamic event pages dengan Tailwind CSS
+- 👥 Guest management system
+- 📩 RSVP system dengan status tracking
+- 🔗 Personalized invitation links
+- 📊 Analytics dashboard
+- 🔐 Security (validation, rate limiting, auth)
+- ⚡ Performance optimization
+- 📱 QR code check-in system
+- 💬 WhatsApp blast integration (ready)
+- 🚀 Production-ready deployment configs
+
 ## 🏗️ Project Structure
 
 ```
 undangan-digital/
 ├── client/          # Frontend (Astro + Tailwind)
 ├── server/          # Backend API (Hono + Cloudflare Workers)
-├── admin/           # CMS Admin (React + shadcn) - Coming soon
+├── admin/           # CMS Admin (React + Vite + Tailwind)
 └── docs/            # Documentation & SQL schema
 ```
 
@@ -44,10 +59,80 @@ npm run dev
 
 Client akan berjalan di `http://localhost:4321`
 
-## 📖 Documentation
+### 4. Setup Admin (CMS Dashboard)
 
+```bash
+cd admin
+npm install
+cp .env.example .env
+# Edit .env dengan Supabase credentials & API URL
+npm run dev
+```
+
+Admin akan berjalan di `http://localhost:3000`
+
+## �️ Tech Stack
+
+### Frontend
+- **Astro** - Static site generator
+- **Tailwind CSS** - Styling
+- **TypeScript** - Type safety
+
+### Admin
+- **React** - UI framework
+- **Vite** - Build tool
+- **React Router** - Routing
+- **TanStack Query** - Data fetching
+- **Tailwind CSS** - Styling
+
+### Backend
+- **Hono** - Web framework
+- **Cloudflare Workers** - Serverless runtime
+- **TypeScript** - Type safety
+
+### Database
+- **Supabase** - PostgreSQL database
+- **Row Level Security** - Data protection
+
+## 📡 API Endpoints
+
+### Events
+- `GET /event/:slug` - Get event by slug
+
+### Guests
+- `GET /guest/:id` - Get guest by ID
+- `POST /guest` - Create new guest
+- `GET /guest/find?event_id=xxx&name=xxx` - Find guest by name
+- `GET /guest/event/:event_id` - Get all guests for event
+
+### RSVP
+- `POST /rsvp` - Submit RSVP
+- `GET /rsvp/guest/:guest_id` - Get RSVP by guest
+- `GET /rsvp/event/:event_id` - Get all RSVPs for event
+
+### Analytics
+- `GET /analytics/event/:event_id` - Get event analytics
+- `GET /analytics/dashboard` - Get dashboard stats
+
+### Check-in (Optional)
+- `POST /checkin` - Record check-in
+- `GET /checkin/event/:event_id` - Get check-ins for event
+
+## �📖 Documentation
+
+### Core Docs
 - [Roadmap](./ROADMAP.md) - Development roadmap & phases
 - [Server Blueprint](./server/BLUEPRINT.md) - Backend architecture
+- [Client Blueprint](./client/BLUEPRINT.md) - Frontend architecture
+
+### Deployment & Production
+- [Deployment Guide](./docs/deployment-guide.md) - Deploy ke Netlify & Cloudflare
+- [Optimization Guide](./docs/optimization-guide.md) - Performance optimization
+- [Security Guide](./docs/security-guide.md) - Security best practices
+
+### Advanced Features
+- [Advanced Features](./docs/advanced-features.md) - QR, WhatsApp, Analytics, etc.
+- [Supabase Setup](./docs/supabase-setup.md) - Database setup guide
 - [Client Blueprint](./client/BLUEPRINT.md) - Frontend architecture
 - [Supabase Setup](./docs/supabase-setup.md) - Database setup guide
 - [Database Schema](./docs/schema.sql) - SQL schema

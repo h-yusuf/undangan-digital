@@ -1,0 +1,570 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import dummyData from '../data/dummy-event.json';
+import Button from '../components/ui/Button.astro';
+import Card from '../components/ui/Card.astro';
+import CardHeader from '../components/ui/CardHeader.astro';
+import CardTitle from '../components/ui/CardTitle.astro';
+import CardContent from '../components/ui/CardContent.astro';
+import Input from '../components/ui/Input.astro';
+import Badge from '../components/ui/Badge.astro';
+import { Home, Users, Calendar, MapPin, Image, Gift, MessageCircle, Music, Play, Pause } from 'lucide-astro';
+
+const { event } = dummyData;
+const guestName = Astro.url.searchParams.get('to') || 'Tamu Undangan';
+
+// Customizable background - bisa diubah via theme config
+const bgType = event.theme?.background_type || 'gradient'; // gradient, solid, image
+const bgValue = event.theme?.background_value || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+
+const eventDate = new Date(event.cover.date);
+const formattedDate = eventDate.toLocaleDateString('id-ID', {
+  weekday: 'long',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout title={event.title}>
+  <!-- Customizable Background -->
+  <div 
+    class="fixed inset-0 -z-10"
+    style={bgType === 'gradient' 
+      ? `background: ${bgValue}` 
+      : bgType === 'image' 
+      ? `background-image: url(${bgValue}); background-size: cover; background-position: center;`
+      : `background-color: ${bgValue}`
+    }
+  >
+    <div class="absolute inset-0 bg-black/10"></div>
+  </div>
+
+  <!-- Music Player -->
+  <div id="music-player" class="fixed top-6 right-6 z-50">
+    <Button 
+      id="music-toggle" 
+      size="icon"
+      variant="secondary"
+      class="rounded-full shadow-lg"
+    >
+      <Play id="music-icon-play" class="w-5 h-5 hidden" />
+      <Pause id="music-icon-pause" class="w-5 h-5" />
+    </Button>
+    <audio id="background-music" loop>
+      <source src={event.music.url} type="audio/mpeg">
+    </audio>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-background/80 backdrop-blur-lg border-t z-50">
+    <div class="container mx-auto">
+      <div class="flex justify-around items-center h-16 max-w-3xl mx-auto">
+        <a href="#hero" class="nav-link flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
+          <Home class="w-5 h-5" />
+          <span class="text-xs">Home</span>
+        </a>
+        <a href="#couple" class="nav-link flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
+          <Users class="w-5 h-5" />
+          <span class="text-xs">Couple</span>
+        </a>
+        <a href="#event" class="nav-link flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
+          <Calendar class="w-5 h-5" />
+          <span class="text-xs">Event</span>
+        </a>
+        <a href="#maps" class="nav-link flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
+          <MapPin class="w-5 h-5" />
+          <span class="text-xs">Maps</span>
+        </a>
+        <a href="#gallery" class="nav-link flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
+          <Image class="w-5 h-5" />
+          <span class="text-xs">Gallery</span>
+        </a>
+        <a href="#gift" class="nav-link flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
+          <Gift class="w-5 h-5" />
+          <span class="text-xs">Gift</span>
+        </a>
+        <a href="#rsvp" class="nav-link flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
+          <MessageCircle class="w-5 h-5" />
+          <span class="text-xs">RSVP</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="hero" class="min-h-screen flex items-center justify-center px-4 py-20">
+    <div class="container max-w-4xl text-center space-y-8 animate-fade-in">
+      <Badge variant="secondary" class="text-sm px-4 py-2">
+        {event.cover.title}
+      </Badge>
+
+      <h1 class="text-6xl md:text-8xl font-bold text-white leading-tight font-serif">
+        {event.cover.bride}
+        <span class="text-white/80">&</span>
+        {event.cover.groom}
+      </h1>
+
+      <p class="text-xl md:text-2xl text-white/90">
+        {formattedDate}
+      </p>
+
+      <!-- Countdown -->
+      <div id="countdown" class="flex justify-center gap-3 flex-wrap">
+        <Card class="min-w-[85px] bg-card/90 backdrop-blur">
+          <CardContent class="p-4 text-center">
+            <div id="days" class="text-3xl font-bold">00</div>
+            <div class="text-xs text-muted-foreground uppercase">Days</div>
+          </CardContent>
+        </Card>
+        <Card class="min-w-[85px] bg-card/90 backdrop-blur">
+          <CardContent class="p-4 text-center">
+            <div id="hours" class="text-3xl font-bold">00</div>
+            <div class="text-xs text-muted-foreground uppercase">Hours</div>
+          </CardContent>
+        </Card>
+        <Card class="min-w-[85px] bg-card/90 backdrop-blur">
+          <CardContent class="p-4 text-center">
+            <div id="minutes" class="text-3xl font-bold">00</div>
+            <div class="text-xs text-muted-foreground uppercase">Minutes</div>
+          </CardContent>
+        </Card>
+        <Card class="min-w-[85px] bg-card/90 backdrop-blur">
+          <CardContent class="p-4 text-center">
+            <div id="seconds" class="text-3xl font-bold">00</div>
+            <div class="text-xs text-muted-foreground uppercase">Seconds</div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card class="max-w-md mx-auto bg-card/90 backdrop-blur">
+        <CardContent class="p-6 text-center">
+          <p class="text-sm text-muted-foreground mb-2">Dear</p>
+          <p class="text-2xl font-bold">{guestName}</p>
+        </CardContent>
+      </Card>
+
+      <Button size="lg" class="shadow-lg">
+        <a href="#couple" class="flex items-center gap-2">
+          Open Invitation
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+          </svg>
+        </a>
+      </Button>
+    </div>
+  </section>
+
+  <!-- Couple Section -->
+  <section id="couple" class="py-24 bg-background">
+    <div class="container px-4">
+      <div class="text-center mb-16 space-y-4">
+        <h2 class="text-5xl md:text-6xl font-bold font-serif">The Couple</h2>
+        <div class="w-24 h-1 bg-primary mx-auto rounded-full"></div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto mb-16">
+        <!-- Bride -->
+        <Card class="text-center group hover:shadow-xl transition-shadow">
+          <CardContent class="p-8">
+            <div class="relative inline-block mb-6">
+              <div class="w-64 h-64 rounded-lg overflow-hidden shadow-lg mx-auto border-2 border-border">
+                <img src={event.couple.bride.photo_url} alt={event.couple.bride.full_name} class="w-full h-full object-cover">
+              </div>
+            </div>
+            <CardTitle class="mb-2">{event.couple.bride.full_name}</CardTitle>
+            <p class="text-muted-foreground mb-4">{event.couple.bride.parents}</p>
+            <Button variant="outline" size="sm">
+              <a href={`https://instagram.com/${event.couple.bride.instagram.replace('@', '')}`} target="_blank" class="flex items-center gap-2">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+                {event.couple.bride.instagram}
+              </a>
+            </Button>
+          </CardContent>
+        </Card>
+
+        <!-- Groom -->
+        <Card class="text-center group hover:shadow-xl transition-shadow">
+          <CardContent class="p-8">
+            <div class="relative inline-block mb-6">
+              <div class="w-64 h-64 rounded-lg overflow-hidden shadow-lg mx-auto border-2 border-border">
+                <img src={event.couple.groom.photo_url} alt={event.couple.groom.full_name} class="w-full h-full object-cover">
+              </div>
+            </div>
+            <CardTitle class="mb-2">{event.couple.groom.full_name}</CardTitle>
+            <p class="text-muted-foreground mb-4">{event.couple.groom.parents}</p>
+            <Button variant="outline" size="sm">
+              <a href={`https://instagram.com/${event.couple.groom.instagram.replace('@', '')}`} target="_blank" class="flex items-center gap-2">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+                {event.couple.groom.instagram}
+              </a>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+
+      <!-- Love Story -->
+      <Card class="max-w-3xl mx-auto">
+        <CardHeader>
+          <div class="flex justify-center mb-4">
+            <div class="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-primary-foreground" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+          </div>
+          <CardTitle class="text-center">Our Story</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p class="text-muted-foreground leading-relaxed text-center">{event.couple.story}</p>
+        </CardContent>
+      </Card>
+    </div>
+  </section>
+
+  <!-- Event Details Section -->
+  <section id="event" class="py-24 bg-muted/30">
+    <div class="container px-4">
+      <div class="text-center mb-16 space-y-4">
+        <h2 class="text-5xl md:text-6xl font-bold font-serif">Event Details</h2>
+        <div class="w-24 h-1 bg-primary mx-auto rounded-full"></div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        {event.events.map((evt) => (
+          <Card class="hover:shadow-xl transition-shadow">
+            <CardHeader>
+              <div class="flex justify-center mb-4">
+                <div class="w-14 h-14 bg-primary rounded-lg flex items-center justify-center">
+                  <Calendar class="w-7 h-7 text-primary-foreground" />
+                </div>
+              </div>
+              <CardTitle class="text-center text-3xl">{evt.type}</CardTitle>
+            </CardHeader>
+            <CardContent class="space-y-3 text-center">
+              <p class="flex items-center justify-center gap-2 text-muted-foreground">
+                <Calendar class="w-4 h-4" />
+                {new Date(evt.date).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+              </p>
+              <p class="flex items-center justify-center gap-2 text-muted-foreground">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                {evt.time}
+              </p>
+              <p class="flex items-center justify-center gap-2 font-semibold">
+                <MapPin class="w-4 h-4" />
+                {evt.location}
+              </p>
+              <p class="text-sm text-muted-foreground">{evt.address}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Maps Section -->
+  <section id="maps" class="py-24 bg-background">
+    <div class="container px-4">
+      <div class="text-center mb-12 space-y-4">
+        <h2 class="text-5xl md:text-6xl font-bold font-serif">Location</h2>
+        <div class="w-24 h-1 bg-primary mx-auto rounded-full"></div>
+        <p class="text-muted-foreground max-w-2xl mx-auto">{event.location.address}</p>
+      </div>
+
+      <Card class="max-w-5xl mx-auto overflow-hidden">
+        <iframe 
+          src={event.location.maps_embed}
+          width="100%" 
+          height="500" 
+          style="border:0;" 
+          allowfullscreen="" 
+          loading="lazy" 
+          referrerpolicy="no-referrer-when-downgrade"
+          class="w-full"
+        ></iframe>
+        <CardContent class="p-6 text-center bg-muted/30">
+          <Button>
+            <a href={event.location.maps_url} target="_blank" class="flex items-center gap-2">
+              <MapPin class="w-4 h-4" />
+              Open in Google Maps
+            </a>
+          </Button>
+        </CardContent>
+      </Card>
+    </div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section id="gallery" class="py-24 bg-muted/30">
+    <div class="container px-4">
+      <div class="text-center mb-16 space-y-4">
+        <h2 class="text-5xl md:text-6xl font-bold font-serif">Gallery</h2>
+        <div class="w-24 h-1 bg-primary mx-auto rounded-full"></div>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
+        {event.gallery.map((photo) => (
+          <Card class="overflow-hidden group cursor-pointer hover:shadow-xl transition-shadow">
+            <div class="relative">
+              <img 
+                src={photo.url} 
+                alt={photo.caption}
+                class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110"
+                loading="lazy"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                <p class="text-white text-sm font-medium">{photo.caption}</p>
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- RSVP Section -->
+  <section id="rsvp" class="py-24 bg-background">
+    <div class="container px-4">
+      <div class="text-center mb-12 space-y-4">
+        <h2 class="text-5xl md:text-6xl font-bold font-serif">RSVP</h2>
+        <div class="w-24 h-1 bg-primary mx-auto rounded-full"></div>
+        <p class="text-muted-foreground max-w-2xl mx-auto">Please confirm your attendance</p>
+      </div>
+
+      <Card class="max-w-2xl mx-auto">
+        <CardContent class="p-8">
+          <form id="rsvp-form" class="space-y-6">
+            <div class="space-y-2">
+              <label class="text-sm font-medium">Name</label>
+              <Input 
+                type="text" 
+                name="name" 
+                value={guestName}
+                readonly
+              />
+            </div>
+
+            <div class="space-y-3">
+              <label class="text-sm font-medium">Attendance Confirmation</label>
+              <div class="grid grid-cols-3 gap-3">
+                <label class="cursor-pointer">
+                  <input type="radio" name="status" value="hadir" class="sr-only peer" required />
+                  <Card class="peer-checked:border-primary peer-checked:bg-primary/5 hover:border-primary/50 transition-colors">
+                    <CardContent class="p-4 text-center">
+                      <svg class="w-8 h-8 mx-auto mb-2 text-muted-foreground peer-checked:text-primary" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                      </svg>
+                      <span class="text-sm font-medium">Attending</span>
+                    </CardContent>
+                  </Card>
+                </label>
+
+                <label class="cursor-pointer">
+                  <input type="radio" name="status" value="tidak_hadir" class="sr-only peer" />
+                  <Card class="peer-checked:border-primary peer-checked:bg-primary/5 hover:border-primary/50 transition-colors">
+                    <CardContent class="p-4 text-center">
+                      <svg class="w-8 h-8 mx-auto mb-2 text-muted-foreground peer-checked:text-primary" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                      </svg>
+                      <span class="text-sm font-medium">Not Attending</span>
+                    </CardContent>
+                  </Card>
+                </label>
+
+                <label class="cursor-pointer">
+                  <input type="radio" name="status" value="ragu" class="sr-only peer" />
+                  <Card class="peer-checked:border-primary peer-checked:bg-primary/5 hover:border-primary/50 transition-colors">
+                    <CardContent class="p-4 text-center">
+                      <svg class="w-8 h-8 mx-auto mb-2 text-muted-foreground peer-checked:text-primary" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+                      </svg>
+                      <span class="text-sm font-medium">Maybe</span>
+                    </CardContent>
+                  </Card>
+                </label>
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <label class="text-sm font-medium">Message & Wishes (Optional)</label>
+              <textarea 
+                name="message" 
+                rows="4" 
+                class="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none"
+                placeholder="Write your message and wishes for us..."
+              ></textarea>
+            </div>
+
+            <Button type="submit" class="w-full">
+              Send Confirmation
+            </Button>
+
+            <div id="rsvp-message" class="hidden p-4 rounded-lg"></div>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+  </section>
+
+  <!-- Gift Section -->
+  <section id="gift" class="py-24 bg-muted/30">
+    <div class="container px-4">
+      <div class="text-center mb-12 space-y-4">
+        <h2 class="text-5xl md:text-6xl font-bold font-serif">Wedding Gift</h2>
+        <div class="w-24 h-1 bg-primary mx-auto rounded-full"></div>
+        <p class="text-muted-foreground max-w-2xl mx-auto">{event.gift.message}</p>
+      </div>
+
+      <div class="max-w-3xl mx-auto grid md:grid-cols-2 gap-6">
+        {event.gift.accounts.map((account) => (
+          <Card class="hover:shadow-xl transition-shadow">
+            <CardHeader>
+              <div class="flex justify-center mb-4">
+                <div class="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
+                  <svg class="w-6 h-6 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                  </svg>
+                </div>
+              </div>
+              <CardTitle class="text-center">{account.bank}</CardTitle>
+            </CardHeader>
+            <CardContent class="text-center space-y-4">
+              <p class="text-3xl font-mono font-bold text-primary">{account.account_number}</p>
+              <p class="text-sm text-muted-foreground">{account.account_name}</p>
+              <Button 
+                variant="outline"
+                class="w-full"
+                onclick={`navigator.clipboard.writeText('${account.account_number}'); this.textContent='Copied!'; setTimeout(() => this.textContent='Copy Account Number', 2000)`}
+              >
+                Copy Account Number
+              </Button>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-card border-t py-12">
+    <div class="container px-4 text-center space-y-4">
+      <p class="text-2xl font-bold font-serif">Thank You</p>
+      <p class="text-muted-foreground">{event.cover.bride} & {event.cover.groom}</p>
+      <div class="w-24 h-1 bg-primary mx-auto rounded-full"></div>
+      <p class="text-sm text-muted-foreground">Made with ❤️ by Undangan Digital Platform</p>
+    </div>
+  </footer>
+
+  <style>
+    @keyframes fade-in {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .animate-fade-in {
+      animation: fade-in 1s ease-out;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    .nav-link.active {
+      color: hsl(var(--foreground));
+    }
+  </style>
+
+  <script define:vars={{ eventDate: event.cover.date }}>
+    // Countdown Timer
+    function updateCountdown() {
+      const target = new Date(eventDate).getTime();
+      const now = new Date().getTime();
+      const diff = target - now;
+
+      if (diff > 0) {
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById('days').textContent = String(days).padStart(2, '0');
+        document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+        document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+        document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+      }
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // Music Player
+    const audio = document.getElementById('background-music');
+    const toggleBtn = document.getElementById('music-toggle');
+    const playIcon = document.getElementById('music-icon-play');
+    const pauseIcon = document.getElementById('music-icon-pause');
+
+    toggleBtn.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play();
+        playIcon.classList.add('hidden');
+        pauseIcon.classList.remove('hidden');
+      } else {
+        audio.pause();
+        playIcon.classList.remove('hidden');
+        pauseIcon.classList.add('hidden');
+      }
+    });
+
+    // Active Nav Link
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (pageYOffset >= sectionTop - 200) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+          link.classList.add('active');
+        }
+      });
+    });
+
+    // RSVP Form
+    const rsvpForm = document.getElementById('rsvp-form');
+    const rsvpMessage = document.getElementById('rsvp-message');
+
+    rsvpForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(rsvpForm);
+      const data = {
+        name: formData.get('name'),
+        status: formData.get('status'),
+        message: formData.get('message')
+      };
+
+      console.log('RSVP Data:', data);
+      
+      rsvpMessage.classList.remove('hidden', 'bg-destructive/10', 'text-destructive');
+      rsvpMessage.classList.add('bg-primary/10', 'text-primary');
+      rsvpMessage.textContent = 'Thank you! Your confirmation has been received.';
+      
+      setTimeout(() => {
+        rsvpMessage.classList.add('hidden');
+      }, 5000);
+    });
+  </script>
+</BaseLayout>

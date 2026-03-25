@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
-import { getSupabaseClient } from '../services/supabase';
+import { getSupabaseClient, getSupabaseAdmin } from '../services/supabase';
 import { successResponse, errorResponse } from '../utils/response';
+import { validateRSVPInput, sanitizeInput } from '../middleware/validation';
 
 type Bindings = {
   SUPABASE_URL: string;
@@ -11,20 +12,14 @@ type Bindings = {
 const rsvp = new Hono<{ Bindings: Bindings }>();
 
 // POST /rsvp
-rsvp.post('/', async (c) => {
+rsvp.post('/', validateRSVPInput, async (c) => {
   try {
     const body = await c.req.json();
     const { guest_id, status, message } = body;
 
-    if (!guest_id || !status) {
-      return c.json(errorResponse('guest_id and status are required', 400), 400);
-    }
+    const sanitizedMessage = message ? sanitizeInput(message) : undefined;
 
-    if (!['hadir', 'tidak_hadir', 'ragu'].includes(status)) {
-      return c.json(errorResponse('Invalid status value', 400), 400);
-    }
-
-    const supabase = getSupabaseClient(c.env);
+    const supabase = getSupabaseAdmin(c.env);
 
     // Check if RSVP already exists
     const { data: existing } = await supabase
@@ -39,7 +34,7 @@ rsvp.post('/', async (c) => {
       // Update existing RSVP
       const result = await supabase
         .from('rsvp')
-        .update({ status, message })
+        .update({ status, message: sanitizedMessage })
         .eq('guest_id', guest_id)
         .select()
         .single();
@@ -50,7 +45,7 @@ rsvp.post('/', async (c) => {
       // Insert new RSVP
       const result = await supabase
         .from('rsvp')
-        .insert({ guest_id, status, message })
+        .insert({ guest_id, status, message: sanitizedMessage })
         .select()
         .single();
       
