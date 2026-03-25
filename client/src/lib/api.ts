@@ -62,6 +62,22 @@ export async function getGuest(id: string): Promise<Guest | null> {
   }
 }
 
+export async function findGuestByName(eventId: string, name: string): Promise<Guest | null> {
+  try {
+    const res = await fetch(`${API_URL}/guest/find?event_id=${eventId}&name=${encodeURIComponent(name)}`);
+    const json = await res.json();
+    
+    if (!json.success) {
+      return null;
+    }
+    
+    return json.data;
+  } catch (error) {
+    console.error('Failed to find guest:', error);
+    return null;
+  }
+}
+
 export async function submitRSVP(data: {
   guest_id: string;
   status: 'hadir' | 'tidak_hadir' | 'ragu';

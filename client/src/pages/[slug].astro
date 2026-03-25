@@ -5,7 +5,7 @@ import EventInfo from '../components/EventInfo.astro';
 import Gallery from '../components/Gallery.astro';
 import RSVPSection from '../components/RSVPSection.astro';
 import Footer from '../components/Footer.astro';
-import { getEvent } from '../lib/api';
+import { getEvent, findGuestByName } from '../lib/api';
 
 const { slug } = Astro.params;
 
@@ -21,6 +21,14 @@ if (!event) {
 
 const url = new URL(Astro.request.url);
 const guestName = url.searchParams.get('to');
+
+let guestId: string | undefined;
+if (guestName && event.id) {
+  const guest = await findGuestByName(event.id, guestName);
+  if (guest) {
+    guestId = guest.id;
+  }
+}
 
 const eventDate = new Date(event.date);
 const formattedDate = eventDate.toLocaleDateString('id-ID', {
@@ -68,7 +76,7 @@ const formattedTime = eventDate.toLocaleTimeString('id-ID', {
 
     <RSVPSection 
       eventId={event.id}
-      guestId={undefined}
+      guestId={guestId}
     />
 
     <Footer />

@@ -81,4 +81,33 @@ guest.get('/event/:event_id', async (c) => {
   }
 });
 
+// GET /guest/find?event_id=xxx&name=xxx
+guest.get('/find', async (c) => {
+  try {
+    const event_id = c.req.query('event_id');
+    const name = c.req.query('name');
+
+    if (!event_id || !name) {
+      return c.json(errorResponse('event_id and name are required', 400), 400);
+    }
+
+    const supabase = getSupabaseClient(c.env);
+
+    const { data, error } = await supabase
+      .from('guests')
+      .select('*')
+      .eq('event_id', event_id)
+      .ilike('name', name)
+      .single();
+
+    if (error || !data) {
+      return c.json(errorResponse('Guest not found', 404), 404);
+    }
+
+    return c.json(successResponse(data));
+  } catch (err) {
+    return c.json(errorResponse('Internal server error'), 500);
+  }
+});
+
 export default guest;
