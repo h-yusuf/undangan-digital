@@ -1,0 +1,13 @@
+---
+interface Props {
+  year?: number;
+}
+
+const { year = new Date().getFullYear() } = Astro.props;
+---
+
+<footer class="py-8 bg-gray-900 text-white text-center">
+  <p class="text-sm">
+    © {year} Undangan Digital Platform
+  </p>
+</footer>

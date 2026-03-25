@@ -1,0 +1,29 @@
+---
+interface Props {
+  images?: string[];
+}
+
+const { images = [] } = Astro.props;
+---
+
+{images.length > 0 && (
+  <section class="py-20 bg-gray-50">
+    <div class="container-custom">
+      <h2 class="text-4xl font-bold font-serif text-gray-900 mb-12 text-center">
+        Galeri
+      </h2>
+      
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        {images.map((image) => (
+          <div class="aspect-square overflow-hidden rounded-2xl">
+            <img 
+              src={image} 
+              alt="Gallery image"
+              class="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+)}

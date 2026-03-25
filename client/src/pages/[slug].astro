@@ -1,0 +1,77 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import EventInfo from '../components/EventInfo.astro';
+import Gallery from '../components/Gallery.astro';
+import RSVPSection from '../components/RSVPSection.astro';
+import Footer from '../components/Footer.astro';
+import { getEvent } from '../lib/api';
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect('/');
+}
+
+const event = await getEvent(slug);
+
+if (!event) {
+  return Astro.redirect('/');
+}
+
+const url = new URL(Astro.request.url);
+const guestName = url.searchParams.get('to');
+
+const eventDate = new Date(event.date);
+const formattedDate = eventDate.toLocaleDateString('id-ID', {
+  weekday: 'long',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+const formattedTime = eventDate.toLocaleTimeString('id-ID', {
+  hour: '2-digit',
+  minute: '2-digit',
+});
+---
+
+<BaseLayout title={event.title} description={event.description || ''}>
+  <main class="min-h-screen bg-gradient-to-br from-primary-50 via-white to-primary-50">
+    
+    <Hero 
+      title={event.title}
+      guestName={guestName || undefined}
+      description={event.description || undefined}
+    >
+      <div class="flex flex-col items-center gap-4">
+        <div class="text-center">
+          <p class="text-2xl font-semibold text-gray-800">{formattedDate}</p>
+          <p class="text-xl text-gray-600">{formattedTime}</p>
+        </div>
+        
+        {event.location && (
+          <p class="text-lg text-gray-600">
+            📍 {event.location}
+          </p>
+        )}
+      </div>
+    </Hero>
+
+    <EventInfo 
+      date={formattedDate}
+      time={formattedTime}
+      location={event.location || undefined}
+    />
+
+    <Gallery images={[]} />
+
+    <RSVPSection 
+      eventId={event.id}
+      guestId={undefined}
+    />
+
+    <Footer />
+
+  </main>
+</BaseLayout>

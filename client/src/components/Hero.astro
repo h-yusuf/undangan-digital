@@ -1,0 +1,53 @@
+---
+interface Props {
+  title: string;
+  guestName?: string;
+  description?: string;
+}
+
+const { title, guestName, description } = Astro.props;
+---
+
+<section class="relative h-screen flex items-center justify-center overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-b from-transparent to-white/80"></div>
+  
+  <div class="container-custom relative z-10 text-center">
+    {guestName && (
+      <div class="mb-8 animate-fade-in">
+        <p class="text-lg text-gray-600 mb-2">Kepada Yth.</p>
+        <h2 class="text-3xl font-semibold text-primary-800 font-serif">
+          {guestName}
+        </h2>
+      </div>
+    )}
+    
+    <h1 class="text-6xl md:text-7xl font-bold font-serif text-primary-900 mb-6">
+      {title}
+    </h1>
+    
+    {description && (
+      <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
+        {description}
+      </p>
+    )}
+    
+    <slot />
+  </div>
+</section>
+
+<style>
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.8s ease-out;
+  }
+</style>
